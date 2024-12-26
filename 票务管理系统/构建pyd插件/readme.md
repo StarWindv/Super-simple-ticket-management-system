@@ -70,7 +70,7 @@ gcc -shared -pthread -fPIC -fwrapv -O2 -Wall -funroll-loops -g -fdebug-prefix-ma
 -ltorch -lcudart -o build/temp.linux-x86_64-cpython-38/sample.cpython-38-x86_64-linux-gnu.so sample.o
 ```
 
-(上面是cython官方给的完整代码，只要你的环境变量正确，正经人谁用这么长的命令啊)
+(上面给的完整代码，只要你的环境变量正确，正经人谁用这么长的命令啊)
 
 通过这种方式，Cython 使得 Python 可以与 C/C++ 库高效地协同工作，从而实现性能的显著提升。
 
