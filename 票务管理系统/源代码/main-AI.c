@@ -33,7 +33,7 @@ int main() {
 
 
     int choice;
-    printf("%s\n\n»¶Ó­Ê¹ÓÃÆ±ÎñĞÅÏ¢¹ÜÀíÏµÍ³%s\n",gold,endc);
+    printf("%s\n\næ¬¢è¿ä½¿ç”¨ç¥¨åŠ¡ä¿¡æ¯ç®¡ç†ç³»ç»Ÿ%s\n",gold,endc);
     do
     {
         int log = login();
@@ -41,7 +41,7 @@ int main() {
         if (log == 0)
         {
             rewind(stdin);
-            printf("%sÇëÑ¡ÔñÕıÈ·µÄÑ¡Ïî£¡%s\n", red, endc);
+            printf("%sè¯·é€‰æ‹©æ­£ç¡®çš„é€‰é¡¹ï¼%s\n", red, endc);
             continue;
         }
         if (log == 2)
@@ -65,26 +65,26 @@ int main() {
                 check_file(stv[i]);
             }
             int exit_point1 = 0;
-            printf("%s»¶Ó­£¡Ç×°®µÄ¹ÜÀíÔ±£¡\n\n%s", gold, endc);
+            printf("%sæ¬¢è¿ï¼äº²çˆ±çš„ç®¡ç†å‘˜ï¼\n\n%s", gold, endc);
             rewind(stdin);
             do
             {
             admin_lable:
                 system("cls");
                 // printf("%s", loggedInUser);
-                printf("\n\n\t Æ±Îñ¹ÜÀíÔ±ÏµÍ³\n*******************************");
-                printf("\n1.Ôö¼Ó³µÆ±ĞÅÏ¢\n");
-                printf("2.½øÈëÆÕÍ¨ÓÃ»§½çÃæ\n");
-                printf("3.ÖØÖÃÓÃ»§ĞÅÏ¢\n");
-                printf("4.Çå¿Õ³µÆ±ĞÅÏ¢\n");
-                printf("5.ÍË³öµÇÂ¼\n");
+                printf("\n\n\t ç¥¨åŠ¡ç®¡ç†å‘˜ç³»ç»Ÿ\n*******************************");
+                printf("\n1.å¢åŠ è½¦ç¥¨ä¿¡æ¯\n");
+                printf("2.è¿›å…¥æ™®é€šç”¨æˆ·ç•Œé¢\n");
+                printf("3.é‡ç½®ç”¨æˆ·ä¿¡æ¯\n");
+                printf("4.æ¸…ç©ºè½¦ç¥¨ä¿¡æ¯\n");
+                printf("5.é€€å‡ºç™»å½•\n");
                 printf("%s6.CodeGeeX4%s\n",gold,endc);
                 printf("*******************************\n\n");
-                printf("ÇëÑ¡Ôñ²Ù×÷: \n\t");
+                printf("è¯·é€‰æ‹©æ“ä½œ: \n\t");
                 if (scanf("%d", &choice) != 1) {
-                    // Çå³ı´íÎóµÄÊäÈë
+                    // æ¸…é™¤é”™è¯¯çš„è¾“å…¥
                     while (getchar() != '\n') {
-                        printf("%s\n\nÎŞĞ§µÄÊäÈë£¬ÇëÖØĞÂÑ¡Ôñ²Ù×÷¡£%s\n\n", red, endc);
+                        printf("%s\n\næ— æ•ˆçš„è¾“å…¥ï¼Œè¯·é‡æ–°é€‰æ‹©æ“ä½œã€‚%s\n\n", red, endc);
                     }
                     continue;
                 }
@@ -103,11 +103,11 @@ int main() {
                         FILE *file = fopen(files[1], "w");
                         if (file == NULL)
                         {
-                            printf("%sÎŞ·¨´ò¿ªÓÃ»§ÎÄ¼ş%s\n", red, endc);
+                            printf("%sæ— æ³•æ‰“å¼€ç”¨æˆ·æ–‡ä»¶%s\n", red, endc);
                         }
                         else
                         {
-                            printf("%sÓÃ»§ĞÅÏ¢ÒÑÖØÖÃ%s\n", gold, endc);
+                            printf("%sç”¨æˆ·ä¿¡æ¯å·²é‡ç½®%s\n", gold, endc);
                             fputs("Admin,Admin\n",file);
                             fclose(file);
                         }
@@ -119,11 +119,11 @@ int main() {
                         FILE *file = fopen(files[0], "w");
                         if (file == NULL)
                         {
-                            printf("%sÎŞ·¨´ò¿ªÆ±ÎñÎÄ¼ş%s\n", red, endc);
+                            printf("%sæ— æ³•æ‰“å¼€ç¥¨åŠ¡æ–‡ä»¶%s\n", red, endc);
                         }
                         else
                         {
-                            printf("%s³µÆ±ĞÅÏ¢ÒÑÇå¿Õ%s\n", gold, endc);
+                            printf("%sè½¦ç¥¨ä¿¡æ¯å·²æ¸…ç©º%s\n", gold, endc);
                             fclose(file);
                         }
                     }
@@ -138,7 +138,7 @@ int main() {
                         break;
                     }
                     default:
-                        printf("ÇëÑ¡ÔñÕıÈ·µÄÑ¡Ïî£¡\n");
+                        printf("è¯·é€‰æ‹©æ­£ç¡®çš„é€‰é¡¹ï¼\n");
                         break;
                 }
             }while(exit_point1 == 0);
@@ -149,28 +149,28 @@ int main() {
             int exit_point1 = 0;
             do
             {
-            normal_user_lable: // ĞÅ±ê
+            normal_user_lable: // ä¿¡æ ‡
                 rewind(stdin);
                 exit_point1 = 0;
-                printf("\n\t  Æ±Îñ¹ÜÀíÏµÍ³\n*******************************");
-                printf("\n1.²éÑ¯Æ±ÎñĞÅÏ¢\n");
-                printf("2.¹ºÂò³µÆ±\n");
-                printf("3.ÍË¶©³µÆ±\n");
-                printf("4.²é¿´ÒÑÓĞ³µÆ±\n");
-                printf("5.ÍË³öµÇÂ¼\n");
+                printf("\n\t  ç¥¨åŠ¡ç®¡ç†ç³»ç»Ÿ\n*******************************");
+                printf("\n1.æŸ¥è¯¢ç¥¨åŠ¡ä¿¡æ¯\n");
+                printf("2.è´­ä¹°è½¦ç¥¨\n");
+                printf("3.é€€è®¢è½¦ç¥¨\n");
+                printf("4.æŸ¥çœ‹å·²æœ‰è½¦ç¥¨\n");
+                printf("5.é€€å‡ºç™»å½•\n");
                 if (admin_point == 1)
                 {
-                    printf("%s6.·µ»Ø¹ÜÀíÔ±Ò³Ãæ\n%s",gold,endc );
+                    printf("%s6.è¿”å›ç®¡ç†å‘˜é¡µé¢\n%s",gold,endc );
                 }
                 printf("*******************************\n\n");
-                printf("ÇëÑ¡Ôñ²Ù×÷: \n\t");
+                printf("è¯·é€‰æ‹©æ“ä½œ: \n\t");
 
                 if (scanf("%d", &choice) != 1)
                 {
-                    // Çå³ı´íÎóµÄÊäÈë
+                    // æ¸…é™¤é”™è¯¯çš„è¾“å…¥
                     while (getchar() != '\n')
                     {
-                        printf("%s\n\nÎŞĞ§µÄÊäÈë£¬ÇëÖØĞÂÑ¡Ôñ²Ù×÷¡£%s\n\n", red, endc);
+                        printf("%s\n\næ— æ•ˆçš„è¾“å…¥ï¼Œè¯·é‡æ–°é€‰æ‹©æ“ä½œã€‚%s\n\n", red, endc);
 
                     }
                 }
@@ -193,7 +193,7 @@ int main() {
                         list_tickets();
                         break;
                     case 5:
-                        printf("ÍË³öÏµÍ³\n");
+                        printf("é€€å‡ºç³»ç»Ÿ\n");
                         exit_point1 = 1;
                         break;
                     case 6:
@@ -204,11 +204,11 @@ int main() {
                         }
                         else
                         {
-                            printf("%sÎŞĞ§µÄÊäÈë£¬ÇëÖØĞÂÑ¡Ôñ¡£%s\n",red,endc);
+                            printf("%sæ— æ•ˆçš„è¾“å…¥ï¼Œè¯·é‡æ–°é€‰æ‹©ã€‚%s\n",red,endc);
                         }
                         break;
                     default:
-                        printf("%sÎŞĞ§µÄÊäÈë£¬ÇëÖØĞÂÑ¡Ôñ²Ù×÷¡£%s\n", red, endc);
+                        printf("%sæ— æ•ˆçš„è¾“å…¥ï¼Œè¯·é‡æ–°é€‰æ‹©æ“ä½œã€‚%s\n", red, endc);
                         break;
                 }
             }while (exit_point1 == 0);
@@ -220,21 +220,21 @@ int main() {
 
 int ai()
 {
-    // ³õÊ¼»¯ Python ½âÊÍÆ÷
+    // åˆå§‹åŒ– Python è§£é‡Šå™¨
     // Py_Initialize();
 
 
-    // µ¼Èë pyollama.pyd Ä£¿é
+    // å¯¼å…¥ pyollama.pyd æ¨¡å—
     PyObject *pName = PyUnicode_DecodeFSDefault("py_ollama");
     PyObject *pModule = PyImport_Import(pName);
     Py_XDECREF(pName);
 
     if (pModule != NULL) {
-        // µ÷ÓÃ Python º¯Êı
+        // è°ƒç”¨ Python å‡½æ•°
         PyObject *pFunc = PyObject_GetAttrString(pModule, "ollama");
 
         if (PyCallable_Check(pFunc)) {
-            PyObject *pArgs = PyTuple_Pack(0); // ÎŞ²ÎÊı
+            PyObject *pArgs = PyTuple_Pack(0); // æ— å‚æ•°
             PyObject *pValue = PyObject_CallObject(pFunc, pArgs);
             Py_XDECREF(pArgs);
             Py_XDECREF(pValue);
@@ -247,9 +247,8 @@ int ai()
         PyErr_Print();
     }
 
-    // ¹Ø±Õ Python ½âÊÍÆ÷
+    // å…³é—­ Python è§£é‡Šå™¨
     // Py_Finalize();
 
 }
-//starwindv@qq.com ĞìÈğÔó-2452234
-//°¾Ò¹Á½ÌìÒ»Ò¹Ğ´³öÀ´µÄ
+//starwindv@qq.com
