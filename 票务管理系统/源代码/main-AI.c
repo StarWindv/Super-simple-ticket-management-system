@@ -2,7 +2,9 @@
 #include <Python.h>
 
 int ai();
-int main() {
+
+int main()
+{
     Py_Initialize();
     const char *directories[] = {
         "resource",
@@ -27,13 +29,15 @@ int main() {
         check_dictionary(directories[i]);
     }
 
-    for (size_t i = 0; i < num_files; ++i) {
+    for (size_t i = 0; i < num_files; ++i)
+    {
         check_file(files[i]);
     }
 
+    // list_user(files[1]);
 
     int choice;
-    printf("%s\n\n欢迎使用票务信息管理系统%s\n",gold,endc);
+    // printf("%s\n\n欢迎使用票务信息管理系统%s\n",gold,endc); // 已移动到login函数
     do
     {
         int log = login();
@@ -41,6 +45,7 @@ int main() {
         if (log == 0)
         {
             rewind(stdin);
+            system_clear();
             printf("%s请选择正确的选项！%s\n", red, endc);
             continue;
         }
@@ -65,41 +70,58 @@ int main() {
                 check_file(stv[i]);
             }
             int exit_point1 = 0;
+            system_clear();
             printf("%s欢迎！亲爱的管理员！\n\n%s", gold, endc);
             rewind(stdin);
             do
             {
             admin_lable:
-                system("cls");
+                // system_clear();
                 // printf("%s", loggedInUser);
-                printf("\n\n\t 票务管理员系统\n*******************************");
-                printf("\n1.增加车票信息\n");
-                printf("2.进入普通用户界面\n");
-                printf("3.重置用户信息\n");
-                printf("4.清空车票信息\n");
-                printf("5.退出登录\n");
-                printf("%s6.CodeGeeX4%s\n",gold,endc);
-                printf("*******************************\n\n");
+                printf("\n\n\t 票务管理员系统\n————————————————————————————————");//*******************************");
+                printf("\n1.查询票务信息");
+                printf("\n2.增加车票信息\n");
+                printf("%s3.进入普通用户界面%s\n",gold,endc);
+                printf("4.重置用户信息\n");
+                printf("5.清空车票信息\n");
+                printf("6.查看用户列表\n");
+                if(strcmp(loggedInUser, "stv")==0)
+                {
+                    printf("7.查看管理员列表\n");
+                    printf("%s8.CodeGeeX4%s\n", gold, endc);
+                    printf("9.退出登录\n");
+                }
+                else{
+                    printf("7.退出登录\n");
+                }
+                printf("————————————————————————————————\n\n");
                 printf("请选择操作: \n\t");
-                if (scanf("%d", &choice) != 1) {
+                if (scanf("%d", &choice) != 1)
+                {
                     // 清除错误的输入
-                    while (getchar() != '\n') {
-                        printf("%s\n\n无效的输入，请重新选择操作。%s\n\n", red, endc);
+                    while (getchar() != '\n')
+                    {
+                        system_clear();
+                        printf("%s无效的输入，请重新选择操作。%s\n\n", red, endc);
                     }
                     continue;
                 }
                 switch(choice)
                 {
                     case 1:
-                        system("cls");
-                        add_ticket();
+                        system_clear();
+                        queryTickets();
                         break;
                     case 2:
-                        system("cls");
-                        goto normal_user_lable;
+                        system_clear();
+                        add_ticket();
+                        break;
                     case 3:
+                        system_clear();
+                        goto normal_user_lable;
+                    case 4:
                     {
-                        system("cls");
+                        system_clear();
                         FILE *file = fopen(files[1], "w");
                         if (file == NULL)
                         {
@@ -108,14 +130,14 @@ int main() {
                         else
                         {
                             printf("%s用户信息已重置%s\n", gold, endc);
-                            fputs("Admin,Admin\n",file);
+                            fputs("Nqzva,Nqzva\n",file);
                             fclose(file);
                         }
                     }
                     break;
-                    case 4:
+                    case 5:
                     {
-                        system("cls");
+                        system_clear();
                         FILE *file = fopen(files[0], "w");
                         if (file == NULL)
                         {
@@ -128,17 +150,49 @@ int main() {
                         }
                     }
                     break;
-                    case 5:
-                        exit_point1 = 1;
-                        break;
+                    case 7:
+                        if(strcmp(loggedInUser, "stv")==0)
+                        {
+                            // 展示管理员
+                            manage_admins(files[2]);
+                            break;
+                        }
+                        else
+                        {
+                            exit_point1 = 1;
+                            system_clear();
+                            break;
+                        }
                     case 6:
                     {
-                        system("cls");
-                        ai();
+                        system_clear();
+                        list_user(files[1], 1);
                         break;
                     }
+                    case 8:
+                    {
+                        if(strcmp(loggedInUser, "stv")==0)
+                        {
+                            system_clear();
+                            ai();
+                            system_clear();
+                            // printf("%scheck%s", red, endc);
+                            break;
+                        } // 自动滑向 default
+                    }
+
+                    case 9:
+                    {
+                        if(strcmp(loggedInUser, "stv")==0)
+                        {
+                            exit_point1 = 1;
+                            system_clear();
+                            break;
+                        }
+                    }
                     default:
-                        printf("请选择正确的选项！\n");
+                        system_clear();
+                        printf("%s请选择正确的选项！%s\n",red, endc);
                         break;
                 }
             }while(exit_point1 == 0);
@@ -149,10 +203,10 @@ int main() {
             int exit_point1 = 0;
             do
             {
-            normal_user_lable: // 信标
+                normal_user_lable: // 信标
                 rewind(stdin);
                 exit_point1 = 0;
-                printf("\n\t  票务管理系统\n*******************************");
+                printf("\n\n\t  票务管理系统\n*******************************");
                 printf("\n1.查询票务信息\n");
                 printf("2.购买车票\n");
                 printf("3.退订车票\n");
@@ -167,6 +221,7 @@ int main() {
 
                 if (scanf("%d", &choice) != 1)
                 {
+                    system_clear();
                     // 清除错误的输入
                     while (getchar() != '\n')
                     {
@@ -178,23 +233,24 @@ int main() {
                 switch (choice)
                 {
                     case 1:
-                        system("cls");
+                        system_clear();
                         queryTickets();
                         break;
                     case 2:
                         buyTicket();
                         break;
                     case 3:
-                        system("cls");
+                        system_clear();
                         returnTicket();
                         break;
                     case 4:
-                        system("cls");
+                        system_clear();
                         list_tickets();
                         break;
                     case 5:
                         printf("退出系统\n");
                         exit_point1 = 1;
+                        system_clear();
                         break;
                     case 6:
                         if (is_admin(loggedInUser))
@@ -211,12 +267,17 @@ int main() {
                         printf("%s无效的输入，请重新选择操作。%s\n", red, endc);
                         break;
                 }
-            }while (exit_point1 == 0);
+            }
+            while (exit_point1 == 0);
         }
-        Py_Finalize();
-    }while (1);
-
+    }
+    while (1);
+    Py_Finalize();
 }
+
+//1970176603@qq.com 徐瑞泽 13309441726 学号2452234
+//熬夜两天一夜写出来
+
 
 int ai()
 {
@@ -251,4 +312,4 @@ int ai()
     // Py_Finalize();
 
 }
-//starwindv@qq.com
+//starwindv@qq.com 
