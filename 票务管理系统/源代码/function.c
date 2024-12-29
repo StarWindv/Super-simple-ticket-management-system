@@ -18,12 +18,26 @@ int ticketCount = 0;
 char loggedInUser[50];
 const char *path;
 
+
+
+int system_clear()
+{
+#if defined(_WIN32) || defined(_WIN64)  // Windows ç³»ç»Ÿ
+    system("cls");  // ä½¿ç”¨ cls æ¸…å±
+#else  // ç±» Unix ç³»ç»Ÿï¼ˆLinux/macOSç­‰ï¼‰
+    system("clear");  // ä½¿ç”¨ clear æ¸…å±
+#endif
+    return 0;  // æ¸…å±æˆåŠŸ
+}
+#endif
+
+
 void check_file(const char *file_path)
 {
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        printf("%s±ØĞèÎÄ¼ş %s ²»´æÔÚ, ¿ªÊ¼´´½¨...%s\n",red,file_path,endc);
+        printf("%så¿…éœ€æ–‡ä»¶ %s ä¸å­˜åœ¨, å¼€å§‹åˆ›å»º...%s\n",red,file_path,endc);
         file = fopen(file_path, "w");
         if (file == NULL)
         {
@@ -52,7 +66,7 @@ void check_file(const char *file_path)
         }
         else if (strcmp(file_path, "resource/tickets.txt") == 0)
         {
-            const char *content="Z376,ÉÏº£,À¼Öİ,Ó²ÎÔ,408,6\nK427,ÉÏº£,¾ÆÈª,Ó²ÎÔ,497,1\n";
+            const char *content="Z376,ä¸Šæµ·,å…°å·,ç¡¬å§,408,6\nK427,ä¸Šæµ·,é…’æ³‰,ç¡¬å§,497,1\n";
             if (fputs(content, file) == EOF)
             {
                 perror("fputs");
@@ -61,11 +75,11 @@ void check_file(const char *file_path)
             }
         }
         fclose(file);
-        printf("%sÄ¿±êÎÄ¼ş´´½¨³É¹¦%s\n",gold,endc);
+        printf("%sç›®æ ‡æ–‡ä»¶åˆ›å»ºæˆåŠŸ%s\n",gold,endc);
     }
     else
     {
-        printf("%sÄ¿±êÎÄ¼şÒÑ´æÔÚ\n%s",gray,endc);
+        printf("%sç›®æ ‡æ–‡ä»¶å·²å­˜åœ¨\n%s",gray,endc);
     }
 }
 
@@ -74,14 +88,14 @@ void check_dictionary(const char *dir_path)
     struct stat st;
     if (stat(dir_path, &st) == -1)
     {
-        printf("%s±ØĞèÎÄ¼ş¼Ğ %s ²»´æÔÚ, ¿ªÊ¼´´½¨...%s\n",red,dir_path,endc);
+        printf("%så¿…éœ€æ–‡ä»¶å¤¹ %s ä¸å­˜åœ¨, å¼€å§‹åˆ›å»º...%s\n",red,dir_path,endc);
         if (mkdir(dir_path) == -1)
         {
             perror("mkdir");
             exit(EXIT_FAILURE);
         }
 
-        // ÉèÖÃÎÄ¼ş¼ĞÎªÒş²Ø
+        // è®¾ç½®æ–‡ä»¶å¤¹ä¸ºéšè—
         DWORD attributes = GetFileAttributes(dir_path);
         if (attributes == INVALID_FILE_ATTRIBUTES)
         {
@@ -93,11 +107,11 @@ void check_dictionary(const char *dir_path)
             perror("SetFileAttributes");
             exit(EXIT_FAILURE);
         }
-        printf("%sÄ¿±êÎÄ¼ş¼Ğ´´½¨³É¹¦%s\n",gold,endc);
+        printf("%sç›®æ ‡æ–‡ä»¶å¤¹åˆ›å»ºæˆåŠŸ%s\n",gold,endc);
     }
     else
     {
-        printf("%sÄ¿±êÎÄ¼ş¼ĞÒÑ´æÔÚ\n%s",gray,endc);
+        printf("%sç›®æ ‡æ–‡ä»¶å¤¹å·²å­˜åœ¨\n%s",gray,endc);
     }
 }
 
@@ -105,9 +119,9 @@ void check_dictionary(const char *dir_path)
 void loadTickets(const char *path) {
     FILE *file = fopen(path, "r");
     if (file == NULL) {
-        printf("\nÎŞ·¨´ò¿ªÆ±ÎñÎÄ¼ş\n");
-        printf("´íÎóÂë: %d\n", errno);
-        printf("´íÎóĞÅÏ¢: %s\n", strerror(errno));
+        printf("\næ— æ³•æ‰“å¼€ç¥¨åŠ¡æ–‡ä»¶\n");
+        printf("é”™è¯¯ç : %d\n", errno);
+        printf("é”™è¯¯ä¿¡æ¯: %s\n", strerror(errno));
         printf("%s",path);
     }
 
@@ -129,7 +143,7 @@ void loadTickets(const char *path) {
 void saveTickets() {
     FILE *file = fopen("resource/tickets.txt", "w");
     if (file == NULL) {
-        printf("\nÎŞ·¨´ò¿ªÆ±ÎñÎÄ¼ş\n");
+        printf("\næ— æ³•æ‰“å¼€ç¥¨åŠ¡æ–‡ä»¶\n");
         exit(1);
     }
 
@@ -138,7 +152,7 @@ void saveTickets() {
                 tickets[i].trainNumber,
                 tickets[i].startStation,
                 tickets[i].endStation,
-                tickets[i].ticketType, // Ğ´Èë ticketType ×Ö¶Î
+                tickets[i].ticketType, // å†™å…¥ ticketType å­—æ®µ
                 tickets[i].price,
                 tickets[i].quantity);
     }
@@ -150,7 +164,7 @@ const char *path;
 void queryTickets() {
     path="resource/tickets.txt";
     loadTickets(path);
-    printf("\n³µ´Î\t\tÆğµã\t\tÖÕµã\t\tÀàĞÍ\t\tÊÛ¼Û\tÓàÁ¿\n");
+    printf("\nè½¦æ¬¡\t\tèµ·ç‚¹\t\tç»ˆç‚¹\t\tç±»å‹\t\tå”®ä»·\tä½™é‡\n");
     for (int i = 0; i < ticketCount; i++) {
         printf("%-8s\t%-12s\t%-12s\t%-8s\t%-5d\t%-5d\n",
                tickets[i].trainNumber,
@@ -172,11 +186,11 @@ void list_tickets() {
     sprintf(path, "resource/user_tickets/%s.txt", loggedInUser);
     FILE *file = fopen(path, "r");
     if (file == NULL) {
-        printf("ÎŞ·¨´ò¿ªÓÃ»§Æ±ÎñÎÄ¼ş\n");
+        printf("æ— æ³•æ‰“å¼€ç”¨æˆ·ç¥¨åŠ¡æ–‡ä»¶\n");
         return;
     }
 
-    printf("\n\n³µ´Î\t\tÆğµã\t\tÖÕµã\t\tÀàĞÍ\t\tÊÛ¼Û\tÊıÁ¿\n");
+    printf("\nè½¦æ¬¡\t\tèµ·ç‚¹\t\tç»ˆç‚¹\t\tç±»å‹\t\tå”®ä»·\tæ•°é‡\n");
     char line[LINE_LENGTH];
     while (fgets(line, sizeof(line), file)) {
         char trainNumber[10];
@@ -193,9 +207,9 @@ void list_tickets() {
 
 void buyTicket() {
     char trainNumber[10];
-    char ticketType[20]; // ×ùÎ»ÀàĞÍ
-    int numberOfTickets = 1; // Ä¬ÈÏ¹ºÂòÊıÁ¿Îª1
-    printf("ÇëÊäÈëÒª¹ºÂòµÄ³µ´ÎºÍ×ùÎ»ÀàĞÍ£¨¸ñÊ½: ³µ´Î ÈíÎÔ ¹ºÂòÊıÁ¿£©: \n(ÊäÈëcancelÈ¡Ïû)\n\t");
+    char ticketType[20]; // åº§ä½ç±»å‹
+    int numberOfTickets = 1; // é»˜è®¤è´­ä¹°æ•°é‡ä¸º1
+    printf("è¯·è¾“å…¥è¦è´­ä¹°çš„è½¦æ¬¡å’Œåº§ä½ç±»å‹ï¼ˆæ ¼å¼: è½¦æ¬¡ è½¯å§ è´­ä¹°æ•°é‡ï¼‰: \n(è¾“å…¥cancelå–æ¶ˆ)\n\t");
     scanf("%s",trainNumber);
     if (strcmp(trainNumber, "cancel") == 0) {
         return;
@@ -206,11 +220,12 @@ void buyTicket() {
     }
     scanf("%d", &numberOfTickets);
     if (strcmp(ticketType, "cancel") == 0) {
+        system_clear();
         return;
     }
     if (numberOfTickets <= 0)
     {
-        printf("ÇëÊäÈëÓĞĞ§µÄÊı×Ö£¡\n");
+        printf("è¯·è¾“å…¥æœ‰æ•ˆçš„æ•°å­—ï¼\n");
         return;
     }
     for (int i = 0; i < ticketCount; i++)
@@ -218,15 +233,15 @@ void buyTicket() {
         if (strcmp(tickets[i].trainNumber, trainNumber) == 0 && strcmp(tickets[i].ticketType, ticketType) == 0) {
             if (tickets[i].quantity >= numberOfTickets) {
                 tickets[i].quantity -= numberOfTickets;
-                printf("¹ºÂò³É¹¦! ¹²¹ºÂò %d ÕÅÆ±¡£\n", numberOfTickets);
+                printf("è´­ä¹°æˆåŠŸ! å…±è´­ä¹° %d å¼ ç¥¨ã€‚\n", numberOfTickets);
                 saveTickets();
 
                 char filePath[60];
-                sprintf(filePath, "resource/user_tickets/%s.txt", loggedInUser); // Ê¹ÓÃ¼ÇÂ¼ÏÂµÄÓÃ»§Ãû
-                FILE *userFile = fopen(filePath, "a"); // ÒÔ×·¼ÓÄ£Ê½´ò¿ªÎÄ¼ş
+                sprintf(filePath, "resource/user_tickets/%s.txt", loggedInUser); // ä½¿ç”¨è®°å½•ä¸‹çš„ç”¨æˆ·å
+                FILE *userFile = fopen(filePath, "a"); // ä»¥è¿½åŠ æ¨¡å¼æ‰“å¼€æ–‡ä»¶
                 if (userFile == NULL)
                 {
-                    printf("ÎŞ·¨´ò¿ªÓÃ»§ÎÄ¼ş\n");
+                    printf("æ— æ³•æ‰“å¼€ç”¨æˆ·æ–‡ä»¶\n");
                     return;
                 }
                 fprintf(userFile, "%s,%s,%s,%s,%d,%d\n", trainNumber, tickets[i].startStation, tickets[i].endStation, ticketType, tickets[i].price, numberOfTickets);
@@ -235,34 +250,35 @@ void buyTicket() {
             }
             else
             {
-                printf("ÎŞ·¨½øĞĞ³¬Á¿¹ºÂò!\n");
+                printf("æ— æ³•è¿›è¡Œè¶…é‡è´­ä¹°!\n");
             }
             return;
         }
     }
-    printf("Î´ÕÒµ½¸Ã³µ´Î»ò×ùÎ»ÀàĞÍ!\n");
+    printf("æœªæ‰¾åˆ°è¯¥è½¦æ¬¡æˆ–åº§ä½ç±»å‹!\n");
 }
+
 
 void returnTicket() {
     char trainNumber[10];
-    char ticketType[20]; // ×ùÎ»ÀàĞÍ
-    int numberOfTickets = 1; // Ä¬ÈÏ¹ºÂòÊıÁ¿Îª1
+    char ticketType[20]; // åº§ä½ç±»å‹
+    int numberOfTickets = 1; // é»˜è®¤è´­ä¹°æ•°é‡ä¸º1
     debug_function4();
 
-    // ´ò¿ªÓÃ»§ÎÄ¼ş£¬ÒÔÖ»¶ÁÄ£Ê½´ò¿ªÎÄ¼ş
+    // æ‰“å¼€ç”¨æˆ·æ–‡ä»¶ï¼Œä»¥åªè¯»æ¨¡å¼æ‰“å¼€æ–‡ä»¶
     char filePath[PATH_MAX];
     sprintf(filePath, "resource/user_tickets/%s.txt", loggedInUser);
     FILE *userFile = fopen(filePath, "r");
-    // ÒÔÖ»¶ÁÄ£Ê½´ò¿ªÎÄ¼ş
+    // ä»¥åªè¯»æ¨¡å¼æ‰“å¼€æ–‡ä»¶
     if (userFile == NULL) {
-        printf("ÎŞ·¨´ò¿ªÓÃ»§ÎÄ¼ş\n");
+        printf("æ— æ³•æ‰“å¼€ç”¨æˆ·æ–‡ä»¶\n");
         return;
     }
 
-    // ÁĞ³öÓÃ»§³ÖÓĞµÄ³µÆ±
-    printf("\nÄú³ÖÓĞµÄ³µÆ±:\n");
+    // åˆ—å‡ºç”¨æˆ·æŒæœ‰çš„è½¦ç¥¨
+    printf("\næ‚¨æŒæœ‰çš„è½¦ç¥¨:\n");
     list_tickets();
-    printf("ÇëÊäÈëÒªÍË¶©µÄ³µ´Î¡¢×ùÎ»ÀàĞÍºÍÊıÁ¿£¨¸ñÊ½: Gxxx Õ¾Æ± number£©: \n(ÊäÈëcancelÈ¡Ïû)\n");
+    printf("è¯·è¾“å…¥è¦é€€è®¢çš„è½¦æ¬¡ã€åº§ä½ç±»å‹å’Œæ•°é‡ï¼ˆæ ¼å¼: Gxxx ç«™ç¥¨ numberï¼‰: \n(è¾“å…¥cancelå–æ¶ˆ)\n");
     scanf("%s",trainNumber);
     if (strcmp(trainNumber, "cancel") == 0) {
         return;
@@ -274,20 +290,20 @@ void returnTicket() {
     scanf("%d", &numberOfTickets);
 
     if (numberOfTickets <= 0) {
-        printf("ÇëÊäÈëÓĞĞ§µÄÊı×Ö£¡");
+        printf("è¯·è¾“å…¥æœ‰æ•ˆçš„æ•°å­—ï¼");
         return;
     }
     printf("%s %s %d", trainNumber, ticketType, numberOfTickets);
-    // ¶ÁÈ¡ÓÃ»§ÎÄ¼şÄÚÈİµ½ÄÚ´æ
+    // è¯»å–ç”¨æˆ·æ–‡ä»¶å†…å®¹åˆ°å†…å­˜
     char lines[MAX_TICKETS][LINE_LENGTH];
     int lineCount = 0;
     char line[LINE_LENGTH];
     while (fgets(line, sizeof(line), userFile)) {
         strcpy(lines[lineCount++], line);
     }
-    fclose(userFile); // ¹Ø±ÕÎÄ¼ş
+    fclose(userFile); // å…³é—­æ–‡ä»¶
 
-    // printf("¶ÁÈ¡ÓÃ»§ÎÄ¼ş³É¹¦\n");
+    // printf("è¯»å–ç”¨æˆ·æ–‡ä»¶æˆåŠŸ\n");
 
     int heldTickets = 0;
     for (int i = 0; i < lineCount; i++) {
@@ -304,10 +320,10 @@ void returnTicket() {
         }
     }
 
-    // printf("¼ÆËãÓÃ»§Æ±Á¿³É¹¦\n");
+    // printf("è®¡ç®—ç”¨æˆ·ç¥¨é‡æˆåŠŸ\n");
 
     if (heldTickets >= numberOfTickets) {
-        // Ö´ĞĞÍËÆ±²Ù×÷
+        // æ‰§è¡Œé€€ç¥¨æ“ä½œ
         for (int i = 0; i < lineCount; i++) {
             char tempTrainNumber[10];
             char tempstartStation[20];
@@ -321,7 +337,7 @@ void returnTicket() {
                 if (tempQuantity > numberOfTickets) {
                     sprintf(lines[i], "%s,%s,%s,%s,%d,%d\n", tempTrainNumber, tempstartStation, tempendStation, tempTicketType, tempprice, tempQuantity - numberOfTickets);
                 } else {
-                    // Èç¹ûÊıÁ¿ÕıºÃµÈÓÚÔòÉ¾³ı
+                    // å¦‚æœæ•°é‡æ­£å¥½ç­‰äºåˆ™åˆ é™¤
                     for (int j = i; j < lineCount - 1; j++) {
                         strcpy(lines[j], lines[j + 1]);
                     }
@@ -331,12 +347,12 @@ void returnTicket() {
             }
         }
 
-        // printf("\nÖ´ĞĞÍËÆ±²Ù×÷³É¹¦\n");
+        // printf("\næ‰§è¡Œé€€ç¥¨æ“ä½œæˆåŠŸ\n");
 
-        // ½«ĞŞ¸ÄºóµÄÊı¾İĞ´»ØÎÄ¼ş
+        // å°†ä¿®æ”¹åçš„æ•°æ®å†™å›æ–‡ä»¶
         userFile = fopen(filePath, "w");
         if (userFile == NULL) {
-            printf("ÎŞ·¨´ò¿ªÓÃ»§ÎÄ¼ş\n");
+            printf("æ— æ³•æ‰“å¼€ç”¨æˆ·æ–‡ä»¶\n");
             return;
         }
         for (int i = 0; i < lineCount; i++) {
@@ -344,9 +360,9 @@ void returnTicket() {
         }
         fclose(userFile);
 
-        // printf("¸üĞÂ³É¹¦\n");
+        // printf("æ›´æ–°æˆåŠŸ\n");
 
-        // ¸üĞÂ×ÜÆ±ÎñÎÄ¼ş
+        // æ›´æ–°æ€»ç¥¨åŠ¡æ–‡ä»¶
         for (int i = 0; i < ticketCount; i++)
         {
             if (strcmp(tickets[i].trainNumber, trainNumber) == 0 && strcmp(tickets[i].ticketType, ticketType) == 0) {
@@ -355,21 +371,23 @@ void returnTicket() {
                 break;
             }
         }
-        // printf("¸üĞÂ×ÜÆ±ÎñÎÄ¼ş³É¹¦\n");
+        // printf("æ›´æ–°æ€»ç¥¨åŠ¡æ–‡ä»¶æˆåŠŸ\n");
 
-        printf("ÍË¶©³É¹¦!\n");
+        printf("é€€è®¢æˆåŠŸ!\n");
     }
 
     else
     {
-        printf("ÄúÃ»ÓĞÕâÃ´¶à³µÆ±£¡\n");
+        printf("æ‚¨æ²¡æœ‰è¿™ä¹ˆå¤šè½¦ç¥¨ï¼\n");
     }
     fclose(userFile);
 }
 
+
 int login()
 {
-    printf("1. µÇÂ¼ÏµÍ³\n2. ×¢²áÓÃ»§\n3. ÍË³öÏµÍ³\nÇëÑ¡Ôñ²Ù×÷:\n\t");
+    printf("%s\n\n  æ¬¢è¿ä½¿ç”¨ç¥¨åŠ¡ä¿¡æ¯ç®¡ç†ç³»ç»Ÿ%s\n%sâ€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”%s  \n",gold,endc,gray,endc);
+    printf("1.        ç™»å½•ç³»ç»Ÿ\n2.        æ³¨å†Œç”¨æˆ·\n3.        é€€å‡ºç³»ç»Ÿ\n\nè¯·é€‰æ‹©æ“ä½œ:\n\t");
     int log_check=0;
     scanf("%d",&log_check);
     getchar();
@@ -377,48 +395,45 @@ int login()
     {
         char password[50];
         char userName[50];
-        printf("ÇëÊäÈëÓÃ»§Ãû: \n\t");
+        printf("è¯·è¾“å…¥ç”¨æˆ·å: \n\t");
         scanf("%s", userName);
-        printf("ÇëÊäÈëÃÜÂë: \n\t");
+        printf("è¯·è¾“å…¥å¯†ç : \n\t");
         scanf("%s", password);
 
-        /*char *enc_user;
-        enc_user=encrypt(userName);
-        char *enc_pass;
-        enc_pass=encrypt(password);
-        printf("%s %s",enc_user,enc_pass);*/
 
-        // ÌáÈ¨
+        // ææƒ
         if (strcmp(userName, "stv") == 0 && strcmp(password, "stv") == 0)
         {
-            strcpy(loggedInUser, userName); // ¼ÇÂ¼µÇÂ¼³É¹¦µÄÓÃ»§Ãûµ½È«¾Ö±äÁ¿ÖĞ
-            return 1; // ·µ»Ø1±íÊ¾µÇÂ¼³É¹¦
+            strcpy(loggedInUser, userName); // è®°å½•ç™»å½•æˆåŠŸçš„ç”¨æˆ·ååˆ°å…¨å±€å˜é‡ä¸­//string copy
+            return 1; // è¿”å›1è¡¨ç¤ºç™»å½•æˆåŠŸ
         }
 
         FILE *file = fopen("resource/users.txt", "r");
         if (file == NULL) {
-            printf("%sÎŞ·¨´ò¿ªÓÃ»§ĞÅÏ¢ÎÄ¼ş%s\n",red,endc);
-            return 0; // µÇÂ¼Ê§°Ü£¬·µ»Ø0
+            printf("%sæ— æ³•æ‰“å¼€ç”¨æˆ·ä¿¡æ¯æ–‡ä»¶%s\n",red,endc);
+            return 0; // ç™»å½•å¤±è´¥ï¼Œè¿”å›0
         }
+
         char line[LINE_LENGTH];
+
         while (fgets(line, sizeof(line), file)) {
             char storedUserName[50];
             char storedPassword[50];
             sscanf(line, "%[^,],%s", storedUserName, storedPassword);
-            if (strcmp(storedUserName, encrypt(userName)) == 0 && strcmp(storedPassword, encrypt(password)) == 0) { // Èç¹ûÓÃ»§ÃûºÍÃÜÂëÆ¥Åä£¬ÔòµÇÂ¼³É¹¦
-                fclose(file); // ¹Ø±ÕÎÄ¼ş
-                strcpy(loggedInUser, userName); // ¼ÇÂ¼µÇÂ¼³É¹¦µÄÓÃ»§Ãûµ½È«¾Ö±äÁ¿ÖĞ
+            if (strcmp(storedUserName, encrypt(userName)) == 0 && strcmp(storedPassword, encrypt(password)) == 0) { // å¦‚æœç”¨æˆ·åå’Œå¯†ç åŒ¹é…ï¼Œåˆ™ç™»å½•æˆåŠŸ
+                fclose(file); // å…³é—­æ–‡ä»¶
+                strcpy(loggedInUser, userName); // è®°å½•ç™»å½•æˆåŠŸçš„ç”¨æˆ·ååˆ°å…¨å±€å˜é‡ä¸­
 
                 char log_path[PATH_MAX];
                 sprintf(log_path, "resource/user_tickets/%s.txt", userName);
-                check_file(log_path); // ¼ì²éÓÃ»§ÎÄ¼şÊÇ·ñ´æÔÚ
+                check_file(log_path); // æ£€æŸ¥ç”¨æˆ·æ–‡ä»¶æ˜¯å¦å­˜åœ¨
 
-                return 1; // ·µ»Ø1±íÊ¾µÇÂ¼³É¹¦
+                return 1; // è¿”å›1è¡¨ç¤ºç™»å½•æˆåŠŸ
             }
         }
-        fclose(file); // ¹Ø±ÕÎÄ¼ş
+        fclose(file); // å…³é—­æ–‡ä»¶
         log_check = 1;
-        return 0; // µÇÂ¼Ê§°Ü£¬·µ»Ø0
+        return 0; // ç™»å½•å¤±è´¥ï¼Œè¿”å›0
     }
     if (log_check == 3)
     {
@@ -429,18 +444,18 @@ int login()
     {
         char new_user[50];
         char new_pass[50];
-        printf("ÇëÊäÈëÓÃ»§Ãû\n\t");
+        printf("è¯·è¾“å…¥ç”¨æˆ·å\n\t");
         scanf("%s", new_user);
         if (strcmp(new_user, "stv") == 0)
         {
-            printf("%s·Ç·¨ÓÃ»§Ãû£¡%s\n", red, endc);
+            printf("%séæ³•ç”¨æˆ·åï¼%s\n", red, endc);
             return 0;
         }
 
         FILE *file = fopen("resource/users.txt", "r");
         if (file == NULL)
         {
-            printf("%sÎŞ·¨´ò¿ªÓÃ»§ĞÅÏ¢ÎÄ¼ş%s\n", red, endc);
+            printf("%sæ— æ³•æ‰“å¼€ç”¨æˆ·ä¿¡æ¯æ–‡ä»¶%s\n", red, endc);
             return 0;
         }
 
@@ -452,40 +467,40 @@ int login()
             sscanf(line, "%[^,],%s", storedUserName, storedPassword);
             if (strcmp(storedUserName, encrypt(new_user)) == 0)
             {
-                printf("%sÓÃ»§ÃûÒÑ´æÔÚ£¡%s\n", red, endc);
+                printf("%sç”¨æˆ·åå·²å­˜åœ¨ï¼%s\n", red, endc);
                 fclose(file);
                 return 0;
             }
         }
         fclose(file);
 
-        printf("ÇëÊäÈëÃÜÂë\n\t");
+        printf("è¯·è¾“å…¥å¯†ç \n\t");
         scanf("%s", new_pass);
 
-        file = fopen("resource/users.txt", "a"); // ÒÔ×·¼ÓÄ£Ê½´ò¿ªÎÄ¼ş
+        file = fopen("resource/users.txt", "a"); // ä»¥è¿½åŠ æ¨¡å¼æ‰“å¼€æ–‡ä»¶
         if (file == NULL)
         {
-            printf("ÎŞ·¨´ò¿ªÓÃ»§ĞÅÏ¢ÎÄ¼ş\n");
-            return 0; // ×¢²áÊ§°Ü£¬·µ»Ø0
+            printf("æ— æ³•æ‰“å¼€ç”¨æˆ·ä¿¡æ¯æ–‡ä»¶\n");
+            return 0; // æ³¨å†Œå¤±è´¥ï¼Œè¿”å›0
         }
         fprintf(file, "%s,%s\n", encrypt(new_user), encrypt(new_pass));
         fclose(file);
-        printf("×¢²á³É¹¦!\n");
-        return 2; // ·µ»Ø2±íÊ¾×¢²á³É¹¦
+        printf("æ³¨å†ŒæˆåŠŸ!\n");
+        return 2; // è¿”å›2è¡¨ç¤ºæ³¨å†ŒæˆåŠŸ
     }
     log_check = 1;
     return 0;
 }
 
 bool is_admin(const char *username) {
-    // ÌáÈ¨
+    // ææƒ
     if (strcmp(username, "stv") == 0) {
         return true;
     }
 
     FILE *file = fopen("resource/admins.txt", "r");
     if (file == NULL) {
-        printf("%sÎŞ·¨´ò¿ª¹ÜÀíÔ±ĞÅÏ¢ÎÄ¼ş%s\n", red , endc);
+        printf("%sæ— æ³•æ‰“å¼€ç®¡ç†å‘˜ä¿¡æ¯æ–‡ä»¶%s\n", red , endc);
         return false;
     }
 
@@ -502,17 +517,17 @@ bool is_admin(const char *username) {
 
 void add_ticket() {
     if (ticketCount >= MAX_TICKETS) {
-        printf("%s³µÆ±ĞÅÏ¢ÒÑÂú£¬ÎŞ·¨Ìí¼ÓĞÂ³µÆ±%s\n", red, endc);
+        printf("%sè½¦ç¥¨ä¿¡æ¯å·²æ»¡ï¼Œæ— æ³•æ·»åŠ æ–°è½¦ç¥¨%s\n", red, endc);
         return;
     }
 
     Ticket newTicket;
-    printf("ÇëÊäÈëÒªÌí¼ÓµÄ³µÆ±ÊıÁ¿£º\n\t");
+    printf("è¯·è¾“å…¥è¦æ·»åŠ çš„è½¦ç¥¨æ•°é‡ï¼š\n\t");
     int num=0;
     scanf("%d",&num);
     for (int i = 0;i < num;i++)
     {
-        printf("ÇëÊäÈëĞÂ³µÆ±ĞÅÏ¢£¨¸ñÊ½: ³µ´Î ÆğµãÕ¾ ÖÕµãÕ¾ Æ±ÀàĞÍ ¼Û¸ñ ÓàÆ±ÊıÁ¿£©: \n");
+        printf("è¯·è¾“å…¥æ–°è½¦ç¥¨ä¿¡æ¯,æ ¼å¼: \nè½¦æ¬¡ èµ·ç‚¹ç«™ ç»ˆç‚¹ç«™ ç¥¨ç±»å‹ ä»·æ ¼ ä½™ç¥¨æ•°é‡: \n");
         scanf("%s %s %s %s %d %d", newTicket.trainNumber,
               newTicket.startStation, newTicket.endStation, newTicket.ticketType, &newTicket.price,
               &newTicket.quantity);
@@ -521,7 +536,7 @@ void add_ticket() {
         FILE *file = fopen("resource/tickets.txt", "a");
         if (file == NULL)
         {
-            printf("\nÎŞ·¨´ò¿ªÆ±ÎñÎÄ¼ş\n");
+            printf("\næ— æ³•æ‰“å¼€ç¥¨åŠ¡æ–‡ä»¶\n");
             exit(1);
         }
 
@@ -533,9 +548,210 @@ void add_ticket() {
                 newTicket.price,
                 newTicket.quantity);
         fclose(file);
-        printf("%s³µÆ±Ìí¼Ó³É¹¦%s\n", gold, endc);
+        system_clear();
+        printf("%sè½¦ç¥¨æ·»åŠ æˆåŠŸ%s\n", gold, endc);
     }
 }
 
+void delete_user(const char *file_path, const char *username);
 
-#endif
+// è¾“å‡ºç”¨æˆ·åå•çš„å‡½æ•°
+void list_user(const char* filename, int n )
+{
+    system_clear();
+    do{
+        printf("%sç”¨æˆ·åˆ—è¡¨å¦‚ä¸‹:%s", gold, endc);
+        FILE* file = fopen(filename, "r"); // æ‰“å¼€æ–‡ä»¶
+        if (file == NULL) {
+            printf("Error opening file.\n");
+            return;
+        }
+
+        char line[256]; // å­˜å‚¨æ¯ä¸€è¡Œçš„å­—ç¬¦
+        while (fgets(line, sizeof(line), file))
+        {
+            line[strcspn(line, "\n")] = '\0';
+
+            // æŸ¥æ‰¾æ˜¯å¦åŒ…å«é€—å·ï¼ˆç”¨äºåŒºåˆ†æ ¼å¼1å’Œæ ¼å¼2ï¼‰
+            char* comma_pos = strchr(line, ',');
+            if (comma_pos != NULL)
+            {
+                *comma_pos = '\0'; // å°† ',' ä½ç½®æ›¿æ¢ä¸º '\0'ï¼Œä½¿å¾—ç”¨æˆ·åå’Œå¯†ç åˆ†å¼€
+                char* encrypted_username = line; // ç”¨æˆ·åéƒ¨åˆ†
+                char* decrypted_username = decrypt(encrypted_username); // è§£å¯†ç”¨æˆ·å
+                if (decrypted_username != NULL)
+                {
+                    printf("\n%s\n", decrypted_username); // è¾“å‡ºè§£å¯†åçš„ç”¨æˆ·å
+                    free(decrypted_username); // é‡Šæ”¾è§£å¯†åçš„å†…å­˜
+                }
+            }
+
+            else
+            {
+                // å¦‚æœæ²¡æœ‰é€—å·ï¼Œåˆ™è¯´æ˜æ˜¯æ ¼å¼2ï¼ŒåªåŒ…å«ç”¨æˆ·å
+                char* encrypted_username = line;
+                char* decrypted_username = decrypt(encrypted_username); // è§£å¯†ç”¨æˆ·å
+                if (decrypted_username != NULL)
+                {
+                    printf("\n%s", decrypted_username); // è¾“å‡ºè§£å¯†åçš„ç”¨æˆ·å
+                    free(decrypted_username); // é‡Šæ”¾è§£å¯†åçš„å†…å­˜
+                }
+            }
+        }
+        fclose(file);
+        if(strcmp(loggedInUser,"stv")==0 && n == 1)
+        {
+            int choice;
+            printf("\n\nè¯·é€‰æ‹©æ“ä½œï¼š\n");
+            printf("1ã€åˆ é™¤ç”¨æˆ·\n");
+            printf("2ã€è¿”å›ä¸Šä¸€çº§\n\t");
+
+            if(scanf("%d", &choice)!=1)
+            {
+                while (getchar() != '\n')
+                {
+                    system_clear();
+                    printf("%sæ— æ•ˆçš„è¾“å…¥ï¼Œè¯·é‡æ–°é€‰æ‹©ã€‚%s\n", red, endc);
+                    continue;
+                }
+            }
+
+            if (choice == 1)
+            {
+                char username[50];
+                printf("è¯·è¾“å…¥è¦åˆ é™¤çš„ç”¨æˆ·å: \n\t");
+                scanf("%s", username);
+                delete_user(filename, username);
+            }
+
+            else if (choice == 2)
+            {
+                system_clear();
+                return;
+            }
+        }
+        else{
+            return;
+        }
+    }while(1);
+}
+
+
+////////////////////////////////////////////////
+void delete_user(const char *file_path, const char *username)
+{
+    // å¯¹ç”¨æˆ·åè¿›è¡ŒåŠ å¯†
+    char *encrypted_username = encrypt(username);
+    if (encrypted_username == NULL) {
+        printf("åŠ å¯†å¤±è´¥\n");
+        return;
+    }
+
+    FILE *file = fopen(file_path, "r");
+    if (file == NULL) {
+        printf("æ— æ³•æ‰“å¼€æ–‡ä»¶ %s\n", file_path);
+        free(encrypted_username);
+        return;
+    }
+
+    char lines[LINE_LENGTH][LINE_LENGTH];
+    int line_count = 0;
+    char line[LINE_LENGTH];
+    int found = 0;  // ç”¨äºæ ‡è®°æ˜¯å¦æ‰¾åˆ°ç”¨æˆ·å
+
+    // é€è¡Œè¯»å–æ–‡ä»¶å†…å®¹
+    while (fgets(line, sizeof(line), file))
+    {
+        // æå–è¡Œä¸­çš„ç¬¬ä¸€ä¸ªç”¨æˆ·åï¼ˆç›´åˆ°é€—å·æˆ–æ¢è¡Œç¬¦ï¼‰
+        char first_word[50];
+        sscanf(line, "%49[^,\n]", first_word);
+
+        // å¦‚æœè¯¥è¡Œçš„ç”¨æˆ·åä¸åŠ å¯†åçš„ç”¨æˆ·åä¸åŒ¹é…ï¼Œåˆ™ä¿ç•™è¯¥è¡Œ
+        if (strcmp(first_word, encrypted_username) != 0)
+        {
+            strcpy(lines[line_count++], line);
+        }
+        else {
+            found = 1;  // æ‰¾åˆ°ç”¨æˆ·å
+        }
+    }
+
+    fclose(file);
+    free(encrypted_username);  // é‡Šæ”¾
+
+    // å¦‚æœæ²¡æœ‰æ‰¾åˆ°ç”¨æˆ·åï¼Œç›´æ¥è¿”å›
+    if (!found)
+    {
+        system_clear();
+        printf("%sç”¨æˆ· %s ä¸å­˜åœ¨%s\n", red, username, endc);
+        return;
+    }
+
+    // å°†æ›´æ–°åçš„å†…å®¹å†™å›æ–‡ä»¶
+    file = fopen(file_path, "w");
+    if (file == NULL) {
+        printf("æ— æ³•é‡æ–°æ‰“å¼€æ–‡ä»¶ %s\n", file_path);
+        return;
+    }
+
+    for (int i = 0; i < line_count; i++)
+    {
+        fputs(lines[i], file);
+    }
+
+    fclose(file);
+    system_clear();
+    printf("%sç”¨æˆ· %s åˆ é™¤æˆåŠŸ%s\n", red, username, endc);
+}
+
+
+void manage_admins(const char *filename)
+{
+    list_user(filename, 0);
+    int choice;
+    printf("\n\n\nè¯·é€‰æ‹©æ“ä½œ:\n1ã€æ·»åŠ ç®¡ç†å‘˜ç”¨æˆ·\n");
+    printf("2ã€åˆ é™¤ç®¡ç†å‘˜ç”¨æˆ·\n");
+    printf("3ã€è¿”å›ä¸Šä¸€çº§\n\t");
+
+    if(scanf("%d", &choice)!=1)
+    {
+        while (getchar() != '\n')
+        {
+            system_clear();
+            printf("%sæ— æ•ˆçš„è¾“å…¥ï¼Œè¯·é‡æ–°é€‰æ‹©ã€‚%s\n", red, endc);
+            return;
+        }
+    }
+    switch (choice)
+    {
+        case 1:
+        {
+                char new_admin[50];
+                printf("è¯·è¾“å…¥è¦æ·»åŠ çš„ç®¡ç†å‘˜ç”¨æˆ·å: ");
+                scanf("%s", new_admin);
+                FILE *file = fopen(filename, "a");
+                if (file == NULL)
+                {
+                    printf("æ— æ³•æ‰“å¼€ç®¡ç†å‘˜æ–‡ä»¶\n");
+                    return;
+                }
+                char* encrypted_admin = encrypt(new_admin);
+                fprintf(file, "%s\n", encrypted_admin);  // æ·»åŠ ç®¡ç†å‘˜
+                fclose(file);
+                system_clear();
+                printf("%sç®¡ç†å‘˜ %s æ·»åŠ æˆåŠŸ%s\n", gold, new_admin, endc);
+                break;
+        }
+        case 2:
+        {
+            char admin_to_remove[50];
+            printf("è¯·è¾“å…¥è¦åˆ é™¤çš„ç®¡ç†å‘˜ç”¨æˆ·å: ");
+            scanf("%s", admin_to_remove);
+            delete_user(filename, admin_to_remove);
+            break;
+        }
+        case 3:
+            system_clear();
+            return;
+    }
+}
