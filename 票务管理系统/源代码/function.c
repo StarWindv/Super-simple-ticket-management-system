@@ -444,9 +444,9 @@ int login()
     {
         char new_user[50];
         char new_pass[50];
-        printf("请输入用户名\n\t");
+        printf("请输入用户名(仅允许字母与数字)\n\t");
         scanf("%s", new_user);
-        if (strcmp(new_user, "stv") == 0)
+        if (strcmp(new_user, "stv") == 0 | alpha_num_check(new_user) == 0)
         {
             printf("%s非法用户名！%s\n", red, endc);
             return 0;
