@@ -46,7 +46,7 @@ int main()
         {
             rewind(stdin);
             system_clear();
-            printf("%s请选择正确的选项！%s\n", red, endc);
+            printf("%s请进行正确的操作！%s\n", red, endc);
             continue;
         }
         if (log == 2)
@@ -312,4 +312,5 @@ int ai()
     // Py_Finalize();
 
 }
-//starwindv@qq.com 
+//starwindv@qq.com 徐瑞泽-2452234
+//熬夜两天一夜写出来的
