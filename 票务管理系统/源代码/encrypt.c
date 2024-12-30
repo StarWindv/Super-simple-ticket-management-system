@@ -1,7 +1,7 @@
+#include "head.h"
+
 #ifndef stv_encrypt_rot13
 #define stv_encrypt_rot13
-
-#include "head.h"
 
 char* encrypt(const char str[]) {
     const int len = strlen(str);
@@ -46,3 +46,19 @@ char* decrypt(const char str[]) {
 // 别看了，问就是网上找的 rot13 算法
 //就是凯撒加密的变体
 #endif
+
+#ifndef stv_num_alpha
+#define stv_num_alpha
+
+int alpha_num_check(const char *str) {
+    while (*str) {
+        // 如果字符不是英文字符或数字，返回0表示不合法
+        if (!isalnum(*str)) {
+            return 0;
+        }
+        str++;
+    }
+    return 1;  // 字符串合法，只包含英文和数字
+}
+
+#endif // stv_num_alpha
